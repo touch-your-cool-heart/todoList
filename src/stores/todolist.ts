@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
+import type { listType } from '@/type/store'
 
 export const useTodoListStore = defineStore('todolist', {
   state: () => ({
-    list: [] as { id: number; content: string; done: boolean }[]
+    list: [] as listType[]
   }),
   actions: {
     add (id: number, content: string) {

@@ -8,12 +8,15 @@
 </template>
 
 <script lang="ts" setup>
-import { Input, Checkbox } from 'ant-design-vue'
+import { Input, Checkbox, message } from 'ant-design-vue'
 import 'ant-design-vue/lib/input/style/css'
 import 'ant-design-vue/lib/checkbox/style/css'
+import 'ant-design-vue/lib/message/style/css'
 import { DeleteOutlined } from '@ant-design/icons-vue'
 import { toRefs } from 'vue'
 import { useTodoListStore } from '@/stores/todolist'
+
+const todoListStore = useTodoListStore()
 
 const props = defineProps({
   info: {
@@ -21,21 +24,23 @@ const props = defineProps({
     default: () => ({})
   }
 })
-const todoListStore = useTodoListStore()
 const { id, done: checked, content } = toRefs(toRefs(props).info.value as any)
+// 点击复选框
 const handleChange = () => {
   todoListStore.modify(id.value, checked.value, content.value)
 }
+// 修改内容为空处理
 let initialValue = ''
 const handleFocus = () => {
   initialValue = content.value
 }
 const handleBlur = () => {
   if (content.value.trim() === '') {
+    message.warning('内容不能为空')
     content.value = initialValue
-    return
   }
 }
+// 删除
 const handleDelete = () => {
   todoListStore.del(id.value)
 }

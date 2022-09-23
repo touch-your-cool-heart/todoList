@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import { beforeEachFunction } from '@/config/routerConfig'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -15,5 +16,7 @@ const router = createRouter({
     }
   ]
 })
+
+router.beforeEach(beforeEachFunction)
 
 export default router

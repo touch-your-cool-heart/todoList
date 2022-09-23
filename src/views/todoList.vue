@@ -32,8 +32,9 @@ import 'ant-design-vue/lib/input/style/css'
 import ListItem from '@/components/listItem.vue'
 import { useTodoListStore } from '@/stores/todolist'
 
-const addContent = ref('')
 const todoListStore = useTodoListStore()
+
+const addContent = ref('')
 const { list } = storeToRefs(todoListStore)
 const undoneList = computed(() => list.value.filter(v => !v.done))
 const doneList = computed(() => list.value.filter(v => v.done))
