@@ -1,18 +1,18 @@
 <template>
   <div class="login-wrapper">
     <h2 class="title">ToDoList</h2>
-    <Form :model="formState" ref="form" :rules="rules">
-      <FormItem name="account">
-        <Input v-model:value="formState.account" placeholder="账号" />
-      </FormItem>
-      <FormItem name="password">
-        <Input v-model:value="formState.password" type="password" placeholder="密码" />
-      </FormItem>
-      <FormItem v-if="isInRegister" name="checkPassword">
-        <Input v-model:value="formState.checkPassword" type="password" placeholder="确认密码" />
-      </FormItem>
-    </Form>
-    <Button type="primary" block @click="handleClickBtn">{{ isInRegister ? '注册' : '登录' }}</Button>
+    <a-form :model="formState" ref="form" :rules="rules">
+      <a-formItem name="account">
+        <a-input v-model:value="formState.account" placeholder="账号" />
+      </a-formItem>
+      <a-formItem name="password">
+        <a-input v-model:value="formState.password" type="password" placeholder="密码" />
+      </a-formItem>
+      <a-formItem v-if="isInRegister" name="checkPassword">
+        <a-input v-model:value="formState.checkPassword" type="password" placeholder="确认密码" />
+      </a-formItem>
+    </a-form>
+    <a-button type="primary" block @click="handleClickBtn">{{ isInRegister ? '注册' : '登录' }}</a-button>
     <span class="register pointer" @click="toggleRegister">{{ isInRegister ? '已有帐号，去登录' : '去注册' }}</span>
   </div>
 </template>
@@ -20,12 +20,8 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Input, Button, Form, FormItem, message } from 'ant-design-vue'
+import { message } from 'ant-design-vue'
 import type { RuleObject } from 'ant-design-vue/es/form/interface'
-import 'ant-design-vue/lib/input/style/css'
-import 'ant-design-vue/lib/button/style/css'
-import 'ant-design-vue/lib/form/style/css'
-import 'ant-design-vue/lib/message/style/css'
 import { useUserStore } from '@/stores/user'
 import { getCookie, setCookie } from '@/utils/cookie'
 

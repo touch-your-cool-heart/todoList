@@ -1,19 +1,16 @@
 <template>
   <div :class="['list-item', checked ? 'done-bg' : '']">
-    <Checkbox v-model:checked="checked" @change="handleChange" />
-    <Input v-model:value="content" @focus="handleFocus" @blur="handleBlur" />
+    <a-checkbox v-model:checked="checked" @change="handleChange" />
+    <a-input v-model:value="content" @focus="handleFocus" @blur="handleBlur" />
     <span class="del pointer"></span>
     <delete-outlined class="pointer" @click="handleDelete" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Input, Checkbox, message } from 'ant-design-vue'
-import 'ant-design-vue/lib/input/style/css'
-import 'ant-design-vue/lib/checkbox/style/css'
-import 'ant-design-vue/lib/message/style/css'
+  import { toRefs } from 'vue'
+import { message } from 'ant-design-vue'
 import { DeleteOutlined } from '@ant-design/icons-vue'
-import { toRefs } from 'vue'
 import { useTodoListStore } from '@/stores/todolist'
 
 const todoListStore = useTodoListStore()

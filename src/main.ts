@@ -6,6 +6,7 @@ import App from './App.vue'
 import router from './router'
 
 import './assets/base.less'
+import 'ant-design-vue/lib/message/style/css'
 
 const app = createApp(App)
 

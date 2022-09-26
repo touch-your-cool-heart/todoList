@@ -2,7 +2,7 @@
   <header class="head">
     <div class="head-content">
       <div class="logo">ToDoList</div>
-      <Input v-model:value="addContent" placeholder="添加ToDo" @press-enter="handleAddContent" />
+      <a-input v-model:value="addContent" placeholder="添加ToDo" @press-enter="handleAddContent" />
     </div>
     <!-- 用户 -->
     <div class="personal">
@@ -12,7 +12,7 @@
   </header>
   <div class="center">
     <!-- 搜索栏 -->
-    <Input class="search" v-model:value="searchContent" placeholder="Search" allowClear />
+    <a-input class="search" v-model:value="searchContent" placeholder="Search" allowClear />
     <!-- list -->
     <div class="list-wrapper">
       <div class="undone">
@@ -37,8 +37,6 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
-import { Input } from 'ant-design-vue'
-import 'ant-design-vue/lib/input/style/css'
 import ListItem from '@/components/listItem.vue'
 import { useTodoListStore } from '@/stores/todolist'
 import { getCookie, removeCookie } from '@/utils/cookie'
