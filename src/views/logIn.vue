@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Input, Button, Form, FormItem, message } from 'ant-design-vue'
 import type { RuleObject } from 'ant-design-vue/es/form/interface'
@@ -27,9 +27,16 @@ import 'ant-design-vue/lib/button/style/css'
 import 'ant-design-vue/lib/form/style/css'
 import 'ant-design-vue/lib/message/style/css'
 import { useUserStore } from '@/stores/user'
+import { getCookie, setCookie } from '@/utils/cookie'
 
 const router = useRouter()
 const userStore = useUserStore()
+
+onMounted(() => {
+  if (getCookie('isAuthenticated')) {
+    router.push({ name: 'todolist' })
+  }
+})
 
 const form = ref()
 const formState = reactive({
@@ -66,11 +73,14 @@ const handleClickBtn = async () => {
       message.success('注册成功')
     }
   } else {
-    if (!userStore.match(formState.account, formState.password)) {
+    const account = userStore.match(formState.account, formState.password)
+    if (!account) {
       message.error('账号或密码错误')
       return
     }
-    localStorage.setItem('isAuthenticated', 'true')
+    setCookie('userName', account)
+    setCookie('isAuthenticated', '1')
+    // localStorage.setItem('isAuthenticated', 'true')
     router.push({ name: 'todolist' })
   }
 }

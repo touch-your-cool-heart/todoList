@@ -19,7 +19,7 @@ export const useUserStore = defineStore('user', {
       if (index === -1) return false
       const todolistStore = useTodoListStore()
       todolistStore.list = this.userList[index].list
-      return true
+      return this.userList[index].account
     }
   },
   persist: true
