@@ -14,5 +14,20 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    host: '192.168.2.64',
+    port: 8080,
+    proxy: {
+      '/api': {
+        target: 'https://cn-apia.coolkit.cn',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, '')
+      },
+      '/dispatch/app': {
+        target: 'https://cn-dispa.coolkit.cn',
+        changeOrigin: true
+      }
+    },
   }
 })

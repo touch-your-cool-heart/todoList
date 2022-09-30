@@ -14,6 +14,11 @@ const router = createRouter({
       component: () => import('../views/logIn.vue')
     },
     {
+      path: '/eWeLink',
+      name: 'eWeLink',
+      component: () => import('../views/eWeLink.vue')
+    },
+    {
       path: '/todolist',
       name: 'todolist',
       component: () => import('../views/todoList.vue')
