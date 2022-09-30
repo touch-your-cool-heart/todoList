@@ -31,7 +31,7 @@ const login = async () => {
     phoneNumber: '+8615779068738',
     password: 'qwe123ASD'
   }
-  const { data: { at, user: { apikey } } } = await $http('login', params)
+  const { data: { at, user: { apikey } } } = await $http('eWeLinklogin', params)
   localStorage.setItem('accessToken', at)
   localStorage.setItem('apikey', apikey)
 }

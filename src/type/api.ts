@@ -1,6 +1,6 @@
 import { any, number } from "vue-types"
 
-export interface apiType {
+export interface ApiType {
   method: 'get' | 'post' | 'put' | 'delete'
   url: string
   auth?: 'sign' | 'accessToken'
