@@ -1,5 +1,3 @@
-import type { ApiType } from '@/type/api'
-
 const prefix = '/api'
 
 export default {
@@ -35,4 +33,4 @@ export default {
     url: '/dispatch/app',
     desc: '分配服务'
   }
-} as Record<string, ApiType>
+}
