@@ -24,9 +24,9 @@ import { message } from 'ant-design-vue'
 import type { RuleObject } from 'ant-design-vue/es/form/interface'
 import { useUserStore } from '@/stores/user'
 import { getCookie, setCookie } from '@/utils/cookie'
+import { $http } from '@/request'
 
 const router = useRouter()
-const userStore = useUserStore()
 
 onMounted(() => {
   if (getCookie('isAuthenticated')) {
@@ -62,21 +62,21 @@ const rules: { [k: string]: RuleObject[] } = {
 const handleClickBtn = async () => {
   await form.value.validate()
   if (isInRegister.value) {
-    if (!userStore.register(formState.account, formState.password)) {
-      message.error('账号已存在')
-    } else {
+    const { error } = await $http('register', { ...formState })
+    if (error === 0) {
       toggleRegister()
       message.success('注册成功')
     }
   } else {
-    const account = userStore.match(formState.account, formState.password)
-    if (!account) {
-      message.error('账号或密码错误')
-      return
-    }
-    setCookie('userName', account)
-    setCookie('isAuthenticated', '1')
-    // localStorage.setItem('isAuthenticated', 'true')
+    // const account = userStore.match(formState.account, formState.password)
+    // if (!account) {
+    //   message.error('账号或密码错误')
+    //   return
+    // }
+    // setCookie('userName', account)
+    // setCookie('isAuthenticated', '1')
+    const { account, password } = formState
+    await $http('login', { account, password })
     router.push({ name: 'todolist' })
   }
 }

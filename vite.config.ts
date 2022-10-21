@@ -27,6 +27,11 @@ export default defineConfig({
       '/dispatch/app': {
         target: 'https://cn-dispa.coolkit.cn',
         changeOrigin: true
+      },
+      '/todolists': {
+        target: 'http://192.168.2.48:3000',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/todolists/, '')
       }
     },
   }
