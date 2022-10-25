@@ -15,13 +15,14 @@ export const requestFailFunc = (error: any) => {
   Promise.reject(error)
 }
 
+const SUCCESS_CODE = 0
+const MESSAGE = 'errDesc'
 export const responseSuccessFunc = (response: AxiosResponse) => {
   const { data } = response
-  if (data.error === 0) {
+  if (data.error === SUCCESS_CODE) {
     return data
   } else {
-    message.error(data.msg)
-    Promise.reject(data.msg)
+    message.error(data[MESSAGE])
   }
 }
 

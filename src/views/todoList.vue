@@ -6,13 +6,13 @@
     </div>
     <!-- 用户 -->
     <div class="personal">
-      <span class="userName pointer ellipsis" :title="userName">{{ userName }}</span>
+      <span class="userName pointer ellipsis" :title="account">{{ account }}</span>
       <span class="exit pointer" @click="handleExit">退出</span>
     </div>
   </header>
   <div class="center">
     <!-- 搜索栏 -->
-    <a-input class="search" v-model:value="searchContent" placeholder="Search" allowClear />
+    <a-input class="search" v-model:value="searchContent" placeholder="Search" allowClear @input="debounceGetList" />
     <!-- list -->
     <div class="list-wrapper">
       <div class="undone">
@@ -20,51 +20,62 @@
           <h2>正在进行</h2>
           <div class="number">{{ undoneList.length }}</div>
         </div>
-        <ListItem v-for="item in undoneList" :key="item.id" :info="item" />
+        <ListItem v-for="item in undoneList" :key="item._id" :info="item" @change="getList" />
       </div>
       <div class="done">
         <div class="title">
           <h2>已经完成</h2>
           <div class="number">{{ doneList.length }}</div>
         </div>
-        <ListItem v-for="item in doneList" :key="item.id" :info="item" />
+        <ListItem v-for="item in doneList" :key="item._id" :info="item" @change="getList" />
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { storeToRefs } from 'pinia'
+import _ from 'lodash'
 import ListItem from '@/components/listItem.vue'
-import { useTodoListStore } from '@/stores/todolist'
-import { getCookie, removeCookie } from '@/utils/cookie'
+import { useUserStore } from '@/stores/user'
+import { removeCookie } from '@/utils/cookie'
+import { $http } from '@/request'
 
-const todoListStore = useTodoListStore()
 const router = useRouter()
+const { userId, account } = useUserStore()
 
-const userName = getCookie('userName')
+interface TodolistType {
+  _id: string
+  content: string
+  done: boolean
+}
+
 const searchContent = ref('')
 const addContent = ref('')
-const { list } = storeToRefs(todoListStore)
-const searchList = computed(() => {
-  const reg = new RegExp(['', ...searchContent.value.trim(), ''].join('.*'))
-  return list.value.filter(v => reg.test(v.content))
+const list = ref<TodolistType[]>([])
+const undoneList = computed(() => list.value.filter(v => !v.done))
+const doneList = computed(() => list.value.filter(v => v.done))
+const getList = async () => {
+  console.log('===')
+  const { data } = await $http('query', { userId, searchContent: searchContent.value.trim() || null })
+  list.value = data
+}
+const debounceGetList = _.debounce(getList, 300)
+onMounted(() => {
+  getList()
 })
-const undoneList = computed(() => searchList.value.filter(v => !v.done))
-const doneList = computed(() => searchList.value.filter(v => v.done))
 // 添加todo项
-const handleAddContent = () => {
-  const str = addContent.value.trim()
-  if (!str) return
-  todoListStore.add(Date.now(), str)
+const handleAddContent = async () => {
+  const content = addContent.value.trim()
+  if (!content) return
+  await $http('add', { userId, content })
   addContent.value = ''
+  getList()
 }
 // 退出
 const handleExit = () => {
-  // localStorage.removeItem('isAuthenticated')
-  removeCookie(['userName', 'isAuthenticated'])
+  removeCookie(['isAuthenticated'])
   router.push({ name: 'login' })
 
 }

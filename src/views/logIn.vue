@@ -68,15 +68,12 @@ const handleClickBtn = async () => {
       message.success('注册成功')
     }
   } else {
-    // const account = userStore.match(formState.account, formState.password)
-    // if (!account) {
-    //   message.error('账号或密码错误')
-    //   return
-    // }
-    // setCookie('userName', account)
-    // setCookie('isAuthenticated', '1')
     const { account, password } = formState
-    await $http('login', { account, password })
+    const { data: { userId, account: name } } = await $http('login', { account, password })
+    setCookie('isAuthenticated', '1')
+    const userStore = useUserStore()
+    userStore.userId = userId
+    userStore.account = name
     router.push({ name: 'todolist' })
   }
 }

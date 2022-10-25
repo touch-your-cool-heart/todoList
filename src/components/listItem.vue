@@ -11,9 +11,9 @@
   import { toRefs } from 'vue'
 import { message } from 'ant-design-vue'
 import { DeleteOutlined } from '@ant-design/icons-vue'
-import { useTodoListStore } from '@/stores/todolist'
+import { useUserStore } from '@/stores/user'
+import { $http } from '@/request'
 
-const todoListStore = useTodoListStore()
 
 const props = defineProps({
   info: {
@@ -21,25 +21,35 @@ const props = defineProps({
     default: () => ({})
   }
 })
-const { id, done: checked, content } = toRefs(toRefs(props).info.value as any)
-// 点击复选框
-const handleChange = () => {
-  todoListStore.modify(id.value, checked.value, content.value)
+const emit = defineEmits(['change'])
+const { _id, done: checked, content } = toRefs(props.info)
+// 勾选取消复选框
+const handleChange = async () => {
+  await $http('modify', { todolistId: _id.value, content: content.value, done: checked.value })
+  emit('change')
 }
 // 修改内容为空处理
 let initialValue = ''
 const handleFocus = () => {
   initialValue = content.value
 }
-const handleBlur = () => {
-  if (content.value.trim() === '') {
+const handleBlur = async () => {
+  const str = content.value.trim()
+  if (str === '') {
     message.warning('内容不能为空')
     content.value = initialValue
+  } else if (str === initialValue) {
+    content.value = initialValue
+  } else {
+    await $http('modify', { todolistId: _id.value, content: content.value.trim(), done: checked.value })
+    emit('change')
   }
 }
 // 删除
-const handleDelete = () => {
-  todoListStore.del(id.value)
+const handleDelete = async () => {
+  const { userId } = useUserStore()
+  await $http('delete', { userId, todolistId: _id.value })
+  emit('change')
 }
 </script>
 
