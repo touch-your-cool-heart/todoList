@@ -11,7 +11,6 @@
   import { toRefs } from 'vue'
 import { message } from 'ant-design-vue'
 import { DeleteOutlined } from '@ant-design/icons-vue'
-import { useUserStore } from '@/stores/user'
 import { $http } from '@/request'
 
 
@@ -47,8 +46,7 @@ const handleBlur = async () => {
 }
 // 删除
 const handleDelete = async () => {
-  const { userId } = useUserStore()
-  await $http('delete', { userId, todolistId: _id.value })
+  await $http('delete', { todolistId: _id.value })
   emit('change')
 }
 </script>

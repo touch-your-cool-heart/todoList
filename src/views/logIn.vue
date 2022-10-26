@@ -24,6 +24,7 @@ import { message } from 'ant-design-vue'
 import type { RuleObject } from 'ant-design-vue/es/form/interface'
 import { useUserStore } from '@/stores/user'
 import { getCookie, setCookie } from '@/utils/cookie'
+import { encrypt } from '@/utils/getAuthorization'
 import { $http } from '@/request'
 
 const router = useRouter()
@@ -62,14 +63,18 @@ const rules: { [k: string]: RuleObject[] } = {
 const handleClickBtn = async () => {
   await form.value.validate()
   if (isInRegister.value) {
-    const { error } = await $http('register', { ...formState })
+    const { error } = await $http('register', {
+      account: formState.account,
+      password: encrypt(formState.password),
+      checkPassword: encrypt(formState.checkPassword)
+    })
     if (error === 0) {
       toggleRegister()
       message.success('注册成功')
     }
   } else {
     const { account, password } = formState
-    const { data: { userId, account: name } } = await $http('login', { account, password })
+    const { data: { userId, account: name } } = await $http('login', { account, password: encrypt(password) })
     setCookie('isAuthenticated', '1')
     const userStore = useUserStore()
     userStore.userId = userId
