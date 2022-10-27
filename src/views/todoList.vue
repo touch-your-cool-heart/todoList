@@ -38,44 +38,47 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import _ from 'lodash'
 import ListItem from '@/components/listItem.vue'
-import { useUserStore } from '@/stores/user'
 import { removeCookie } from '@/utils/cookie'
 import { $http } from '@/request'
 
 const router = useRouter()
-const { userId, account } = useUserStore()
 
 interface TodolistType {
   _id: string
   content: string
   done: boolean
 }
-
+const account = ref('admin')
 const searchContent = ref('')
 const addContent = ref('')
 const list = ref<TodolistType[]>([])
 const undoneList = computed(() => list.value.filter(v => !v.done))
 const doneList = computed(() => list.value.filter(v => v.done))
 const getList = async () => {
-  console.log('===')
-  const { data } = await $http('query', { userId, searchContent: searchContent.value.trim() || null })
+  const { data } = await $http('query', { searchContent: searchContent.value.trim() || null })
   list.value = data
 }
+const getUserInfo = async () => {
+  const { data } = await $http('getUserInfo')
+  account.value = data
+}
 const debounceGetList = _.debounce(getList, 300)
-onMounted(() => {
-  getList()
+onMounted(async () => {
+  await getList()
+  await getUserInfo()
 })
 // 添加todo项
 const handleAddContent = async () => {
   const content = addContent.value.trim()
   if (!content) return
-  await $http('add', { userId, content })
+  await $http('add', { content })
   addContent.value = ''
   getList()
 }
 // 退出
 const handleExit = () => {
   removeCookie(['isAuthenticated'])
+  localStorage.removeItem('access_token')
   router.push({ name: 'login' })
 
 }

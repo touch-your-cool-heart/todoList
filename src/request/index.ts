@@ -17,7 +17,8 @@ export const $http = async (path: string, params = {}, options = {}) => {
   const mergeOption = _.merge(defaultOptions, options, { 
     headers: {
       'X-CK-Appid': takeAppid ? appid : '',
-      Authorization: auth ? getAuthorization(params, auth) : ''
+      Authorization: auth ? getAuthorization(params, auth) : '',
+      access_token: localStorage.getItem('access_token') || ''
     }
   })
   const requestItem = {
@@ -30,6 +31,6 @@ export const $http = async (path: string, params = {}, options = {}) => {
     const res = await instance(requestItem)
     return res
   } catch (error) {
-    Promise.reject(error)
+    return Promise.reject(error)
   }
 }

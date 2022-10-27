@@ -1,6 +1,5 @@
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { message } from 'ant-design-vue'
-
 export const defaultOptions = {
   headers: {
     'Content-Type': 'application/json'
@@ -17,12 +16,14 @@ export const requestFailFunc = (error: any) => {
 
 const SUCCESS_CODE = 0
 const MESSAGE = 'errDesc'
+
 export const responseSuccessFunc = (response: AxiosResponse) => {
   const { data } = response
   if (data.error === SUCCESS_CODE) {
     return data
   } else {
     message.error(data[MESSAGE])
+    return Promise.reject(data[MESSAGE])
   }
 }
 

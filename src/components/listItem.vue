@@ -1,6 +1,6 @@
 <template>
-  <div :class="['list-item', checked ? 'done-bg' : '']">
-    <a-checkbox v-model:checked="checked" @change="handleChange" />
+  <div :class="['list-item', done ? 'done-bg' : '']">
+    <a-checkbox :checked="done" @change="handleChange" />
     <a-input v-model:value="content" @focus="handleFocus" @blur="handleBlur" />
     <span class="del pointer"></span>
     <delete-outlined class="pointer" @click="handleDelete" />
@@ -8,11 +8,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { toRefs } from 'vue'
+import { ref, toRefs } from 'vue'
 import { message } from 'ant-design-vue'
 import { DeleteOutlined } from '@ant-design/icons-vue'
 import { $http } from '@/request'
-
 
 const props = defineProps({
   info: {
@@ -21,10 +20,16 @@ const props = defineProps({
   }
 })
 const emit = defineEmits(['change'])
-const { _id, done: checked, content } = toRefs(props.info)
+
+// const { _id, content, done } = props.info
+const todolistId = props.info._id
+const content = ref(props.info.content)
+const done = ref(props.info.done)
+
 // 勾选取消复选框
-const handleChange = async () => {
-  await $http('modify', { todolistId: _id.value, content: content.value, done: checked.value })
+const handleChange = async (e: EventSource) => {
+  console.log(e.target.checked)
+  await $http('modify', { todolistId, content: content.value, done: e.target.checked })
   emit('change')
 }
 // 修改内容为空处理
@@ -40,13 +45,17 @@ const handleBlur = async () => {
   } else if (str === initialValue) {
     content.value = initialValue
   } else {
-    await $http('modify', { todolistId: _id.value, content: content.value.trim(), done: checked.value })
-    emit('change')
+    try {
+      await $http('modify', { todolistId, content: content.value.trim(), done: done.value})
+      emit('change')
+    } catch (error) {
+      content.value = initialValue
+    }
   }
 }
 // 删除
 const handleDelete = async () => {
-  await $http('delete', { todolistId: _id.value })
+  await $http('delete', { todolistId })
   emit('change')
 }
 </script>

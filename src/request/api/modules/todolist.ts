@@ -11,6 +11,11 @@ export default {
     url: `${prefix}/user/login`,
     desc: '登录'
   },
+  getUserInfo: {
+    method: 'get',
+    url: `${prefix}/user/getUserInfo`,
+    desc: '根据token获取用户信息'
+  },
   add: {
     method: 'post',
     url: `${prefix}/todolist/add`,
