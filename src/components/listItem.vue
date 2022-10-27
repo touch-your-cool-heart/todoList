@@ -27,8 +27,7 @@ const content = ref(props.info.content)
 const done = ref(props.info.done)
 
 // 勾选取消复选框
-const handleChange = async (e: EventSource) => {
-  console.log(e.target.checked)
+const handleChange = async (e) => {
   await $http('modify', { todolistId, content: content.value, done: e.target.checked })
   emit('change')
 }
