@@ -38,7 +38,6 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import _ from 'lodash'
 import ListItem from '@/components/listItem.vue'
-import { removeCookie } from '@/utils/cookie'
 import { $http } from '@/request'
 
 const router = useRouter()
@@ -48,7 +47,7 @@ interface TodolistType {
   content: string
   done: boolean
 }
-const account = ref('admin')
+const account = ref('')
 const searchContent = ref('')
 const addContent = ref('')
 const list = ref<TodolistType[]>([])
@@ -77,7 +76,6 @@ const handleAddContent = async () => {
 }
 // 退出
 const handleExit = () => {
-  removeCookie(['isAuthenticated'])
   localStorage.removeItem('access_token')
   router.push({ name: 'login' })
 

@@ -22,17 +22,10 @@ import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { message } from 'ant-design-vue'
 import type { RuleObject } from 'ant-design-vue/es/form/interface'
-import { getCookie, setCookie } from '@/utils/cookie'
 import { encrypt } from '@/utils/getAuthorization'
 import { $http } from '@/request'
 
 const router = useRouter()
-
-onMounted(() => {
-  if (getCookie('isAuthenticated')) {
-    router.push({ name: 'todolist' })
-  }
-})
 
 const form = ref()
 const formState = reactive({
@@ -74,7 +67,6 @@ const handleClickBtn = async () => {
   } else {
     const { account, password } = formState
     const { data: { access_token } } = await $http('login', { account, password: encrypt(password) })
-    setCookie('isAuthenticated', '1')
     localStorage.setItem('access_token', access_token)
     router.push({ name: 'todolist' })
   }
