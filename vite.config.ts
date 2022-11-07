@@ -29,7 +29,7 @@ export default defineConfig({
         changeOrigin: true
       },
       '/todolists': {
-        target: 'http://192.168.2.48:3000',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/todolists/, '')
       }
