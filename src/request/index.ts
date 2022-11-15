@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import _ from 'lodash'
 import { defaultOptions, requestSuccessFunc, requestFailFunc, responseSuccessFunc, responseFailFunc } from '@/config/axios.config'
 import api from './api'
@@ -28,7 +28,7 @@ export const $http = async (path: string, params = {}, options = {}) => {
     ...mergeOption
   }
   try {
-    const res = await instance(requestItem)
+    const res = await instance(requestItem) as AxiosResponse['data']
     return res
   } catch (error) {
     return Promise.reject(error)
