@@ -67,6 +67,7 @@ const handleClickBtn = async () => {
   } else {
     const { account, password } = formState
     const { data: { access_token } } = await $http('login', { account, password: encrypt(password) })
+    localStorage.setItem('account', account)
     localStorage.setItem('access_token', access_token)
     router.push({ name: 'todolist' })
   }

@@ -29,7 +29,8 @@ export default defineConfig({
         changeOrigin: true
       },
       '/todolists': {
-        target: 'http://localhost:3000',
+        target: 'https://1vshiputi7.execute-api.ap-southeast-1.amazonaws.com',
+        // target: 'http://localhost:3000',
         changeOrigin: true,
         rewrite: path => path.replace(/^\/todolists/, '')
       }

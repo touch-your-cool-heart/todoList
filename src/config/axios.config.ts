@@ -15,7 +15,7 @@ export const requestFailFunc = (error: any) => {
 }
 
 const SUCCESS_CODE = 0
-const MESSAGE = 'errDesc'
+const MESSAGE = 'msg'
 
 export const responseSuccessFunc = (response: AxiosResponse) => {
   const { data } = response
