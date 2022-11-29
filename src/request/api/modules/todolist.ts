@@ -1,5 +1,5 @@
-const prefix = '/todolists'
-// const prefix = 'https://1vshiputi7.execute-api.ap-southeast-1.amazonaws.com'
+// const prefix = '/todolists'
+const prefix = 'https://1vshiputi7.execute-api.ap-southeast-1.amazonaws.com'
 
 export default {
   register: {

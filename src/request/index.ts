@@ -13,11 +13,12 @@ instance.interceptors.request.use(requestSuccessFunc, requestFailFunc)
 instance.interceptors.response.use(responseSuccessFunc, responseFailFunc)
 
 export const $http = async (path: string, params = {}, options = {}) => {
-  const { url, method, auth, takeAppid } = api[path as keyof typeof api]
+//   const { url, method, auth, takeAppid } = api[path as keyof typeof api]
+  const { url, method } = api[path as keyof typeof api]
   const mergeOption = _.merge(defaultOptions, options, { 
     headers: {
-      'X-CK-Appid': takeAppid ? appid : '',
-      Authorization: auth ? getAuthorization(params, auth) : '',
+    //   'X-CK-Appid': takeAppid ? appid : '',
+    //   Authorization: auth ? getAuthorization(params, auth) : '',
       access_token: localStorage.getItem('access_token') || ''
     }
   })
