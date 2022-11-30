@@ -1,7 +1,7 @@
 <template>
   <div :class="['list-item', done ? 'done-bg' : '']">
     <a-checkbox :checked="done" @change="handleCheckboxChange" />
-    <a-input v-model:value="content" @focus="handleFocus" @blur="handleContentChange" @press-enter="handleContentChange" />
+    <a-input v-model:value="content" @focus="handleFocus" @press-enter="handleContentChange" ref="inputElement" />
     <span class="del pointer"></span>
     <delete-outlined class="pointer" @click="handleDelete" />
   </div>
@@ -11,6 +11,7 @@
 import { ref } from 'vue'
 import { message } from 'ant-design-vue'
 import { DeleteOutlined } from '@ant-design/icons-vue'
+import _ from 'lodash'
 import { $http } from '@/request'
 
 const props = defineProps({
@@ -21,21 +22,23 @@ const props = defineProps({
 })
 const emit = defineEmits(['change'])
 
+const inputElement = ref<HTMLElement>()
 const id = props.info.id
 const content = ref(props.info.content)
 const done = ref(props.info.done)
 
 // 勾选取消复选框
-const handleCheckboxChange = async (e: any) => {
+const handleCheckboxChange = _.debounce(async (e: any) => {
   await $http('modify', { id, content: content.value, done: e.target.checked })
   emit('change')
-}
+}, 300, { leading: false, trailing: true })
 // 修改内容为空处理
 let initialValue = ''
 const handleFocus = () => {
   initialValue = content.value
 }
 const handleContentChange = async () => {
+  inputElement.value?.blur()
   const str = content.value.trim()
   if (str === '') {
     message.warning('内容不能为空')
@@ -52,10 +55,10 @@ const handleContentChange = async () => {
   }
 }
 // 删除
-const handleDelete = async () => {
+const handleDelete = _.debounce(async () => {
   await $http('delete', { id })
   emit('change')
-}
+}, 300, { leading: false, trailing: true })
 </script>
 
 <style lang="less" scoped>

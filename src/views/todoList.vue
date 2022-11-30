@@ -62,13 +62,20 @@ onMounted(async () => {
     await getList();
 });
 // 添加todo项
+// const handleAddContent = _.debounce(async () => {
+//     const content = addContent.value.trim();
+//     if (!content) return;
+//     await $http('add', { content });
+//     addContent.value = '';
+//     getList();
+// }, 300, { leading: false, trailing: true });
 const handleAddContent = async () => {
     const content = addContent.value.trim();
     if (!content) return;
     await $http('add', { content });
     addContent.value = '';
     getList();
-};
+}
 // 退出
 const handleExit = () => {
     localStorage.removeItem('access_token');

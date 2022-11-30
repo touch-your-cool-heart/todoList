@@ -1,9 +1,9 @@
-import axios, { type AxiosResponse } from 'axios'
+import axios, { type AxiosResponse, type AxiosRequestConfig } from 'axios'
 import _ from 'lodash'
 import { defaultOptions, requestSuccessFunc, requestFailFunc, responseSuccessFunc, responseFailFunc } from '@/config/axios.config'
 import api from './api'
-import { getAuthorization } from '@/utils/getAuthorization'
-import { appid } from '@/config/global.config'
+// import { getAuthorization } from '@/utils/getAuthorization'
+// import { appid } from '@/config/global.config'
 
 const getParamsKey = (method: string) => method === 'post' || method === 'put' ? 'data' : 'params'
 
@@ -13,12 +13,10 @@ instance.interceptors.request.use(requestSuccessFunc, requestFailFunc)
 instance.interceptors.response.use(responseSuccessFunc, responseFailFunc)
 
 export const $http = async (path: string, params = {}, options = {}) => {
-//   const { url, method, auth, takeAppid } = api[path as keyof typeof api]
+  // const { url, method, auth, takeAppid } = api[path as keyof typeof api]
   const { url, method } = api[path as keyof typeof api]
-  const mergeOption = _.merge(defaultOptions, options, { 
+  const mergeOption = _.merge(defaultOptions, options, {
     headers: {
-    //   'X-CK-Appid': takeAppid ? appid : '',
-    //   Authorization: auth ? getAuthorization(params, auth) : '',
       access_token: localStorage.getItem('access_token') || ''
     }
   })
