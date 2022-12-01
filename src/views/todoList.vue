@@ -57,25 +57,18 @@ const getList = async () => {
     const { data } = await $http('query', { searchContent: searchContent.value.trim() || '' });
     list.value = data;
 };
-const debounceGetList = _.debounce(getList, 300);
+const debounceGetList = _.debounce(getList, 500);
 onMounted(async () => {
     await getList();
 });
 // 添加todo项
-// const handleAddContent = _.debounce(async () => {
-//     const content = addContent.value.trim();
-//     if (!content) return;
-//     await $http('add', { content });
-//     addContent.value = '';
-//     getList();
-// }, 300, { leading: false, trailing: true });
-const handleAddContent = async () => {
+const handleAddContent = _.debounce(async () => {
     const content = addContent.value.trim();
     if (!content) return;
     await $http('add', { content });
     addContent.value = '';
     getList();
-}
+}, 500, { leading: true, trailing: true });
 // 退出
 const handleExit = () => {
     localStorage.removeItem('access_token');

@@ -9,6 +9,14 @@ const getParamsKey = (method: string) => method === 'post' || method === 'put' ?
 
 const instance = axios.create({ timeout: 60000 })
 
+const pendingRequest = new Map();
+
+// 生成请求key
+const getRequestKey = (config: AxiosRequestConfig) => {
+    const { method, url, params, data } = config;
+    return [method, url, JSON.stringify(params), JSON.stringify(data)].join('&');
+};
+
 instance.interceptors.request.use(requestSuccessFunc, requestFailFunc)
 instance.interceptors.response.use(responseSuccessFunc, responseFailFunc)
 
@@ -27,9 +35,15 @@ export const $http = async (path: string, params = {}, options = {}) => {
     ...mergeOption
   }
   try {
+    const requestKey = getRequestKey(requestItem)
+    if (pendingRequest.has(requestKey)) return
+    pendingRequest.set(requestKey, requestItem)
     const res = await instance(requestItem) as AxiosResponse['data']
+    pendingRequest.delete(requestKey)
     return res
   } catch (error) {
     return Promise.reject(error)
   }
 }
+
+
