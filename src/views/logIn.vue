@@ -3,13 +3,13 @@
     <h2 class="title">ToDoList</h2>
     <a-form :model="formState" ref="form" :rules="rules">
       <a-formItem name="account">
-        <a-input v-model:value="formState.account" placeholder="账号" />
+        <a-input v-model:value="formState.account" placeholder="账号" class="account" />
       </a-formItem>
       <a-formItem name="password">
-        <a-input v-model:value="formState.password" type="password" placeholder="密码" />
+        <a-input v-model:value="formState.password" type="password" placeholder="密码" class="password" />
       </a-formItem>
       <a-formItem v-if="isInRegister" name="checkPassword">
-        <a-input v-model:value="formState.checkPassword" type="password" placeholder="确认密码" />
+        <a-input v-model:value="formState.checkPassword" type="password" placeholder="确认密码" class="checkPassword" />
       </a-formItem>
     </a-form>
     <a-button type="primary" block @click="handleClickBtn">{{ isInRegister ? '注册' : '登录' }}</a-button>
@@ -66,7 +66,7 @@ const handleClickBtn = async () => {
       message.error('账号已存在')
     } else {
       toggleRegister()
-      message.success('注册成功')
+    //   message.success('注册成功')
     }
   } else {
     const account = userStore.match(formState.account, formState.password)

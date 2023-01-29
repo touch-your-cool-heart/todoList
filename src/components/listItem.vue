@@ -1,14 +1,14 @@
 <template>
   <div :class="['list-item', checked ? 'done-bg' : '']">
     <a-checkbox v-model:checked="checked" @change="handleChange" />
-    <a-input v-model:value="content" @focus="handleFocus" @blur="handleBlur" />
-    <span class="del pointer"></span>
-    <delete-outlined class="pointer" @click="handleDelete" />
+    <a-input v-model:value="content" @focus="handleFocus" @press-enter="handleEnter" ref="inputElement" />
+    <!-- <span class="del pointer"></span> -->
+    <delete-outlined class="del pointer" @click="handleDelete" />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { toRefs } from 'vue'
+  import { ref, toRefs } from 'vue'
 import { message } from 'ant-design-vue'
 import { DeleteOutlined } from '@ant-design/icons-vue'
 import { useTodoListStore } from '@/stores/todolist'
@@ -28,10 +28,12 @@ const handleChange = () => {
 }
 // 修改内容为空处理
 let initialValue = ''
+const inputElement = ref<HTMLElement>()
 const handleFocus = () => {
   initialValue = content.value
 }
-const handleBlur = () => {
+const handleEnter = () => {
+  inputElement.value?.blur()
   if (content.value.trim() === '') {
     message.warning('内容不能为空')
     content.value = initialValue

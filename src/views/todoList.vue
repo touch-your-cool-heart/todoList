@@ -2,7 +2,7 @@
   <header class="head">
     <div class="head-content">
       <div class="logo">ToDoList</div>
-      <a-input v-model:value="addContent" placeholder="添加ToDo" @press-enter="handleAddContent" />
+      <a-input v-model:value="addContent" placeholder="添加ToDo" @press-enter="handleAddContent" class="addTodo" />
     </div>
     <!-- 用户 -->
     <div class="personal">
